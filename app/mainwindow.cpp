@@ -1248,7 +1248,7 @@ void MainWindow::toggleWindowState()
         QObject::connect(watcher, &QDBusPendingCallWatcher::finished, this, [=, this]() {
             QDBusPendingReply<QRect> reply = *watcher;
             m_availableScreenRect = reply.isValid() ? reply.value() : QRect();
-            setWindowGeometry(Settings::width(), Settings::height(), Settings::position());
+            applyWindowGeometry();
             watcher->deleteLater();
         });
 
