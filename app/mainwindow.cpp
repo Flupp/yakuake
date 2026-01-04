@@ -1242,15 +1242,8 @@ void MainWindow::toggleWindowState()
                                                       QStringLiteral("availableScreenRect"));
         const QString screenName = m_outputOrderWatcher->outputOrder().at(getScreen());
         message.setArguments({screenName});
-        QDBusPendingCall call = QDBusConnection::sessionBus().asyncCall(message);
-        QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
-
-        QObject::connect(watcher, &QDBusPendingCallWatcher::finished, this, [=, this]() {
-            QDBusPendingReply<QRect> reply = *watcher;
-            m_availableScreenRect = reply.isValid() ? reply.value() : QRect();
-            applyWindowGeometry();
-            watcher->deleteLater();
-        });
+        QDBusPendingReply<QRect> reply = QDBusConnection::sessionBus().call(message);
+        m_availableScreenRect = reply.isValid() ? reply.value() : QRect();
 
         _toggleWindowState();
     } else {
