@@ -1601,18 +1601,21 @@ QRect MainWindow::getScreenGeometry()
 
 QRect MainWindow::getDesktopGeometry()
 {
-    QRect screenGeometry = getScreenGeometry();
-
     QAction *action = actionCollection()->action(QStringLiteral("view-full-screen"));
 
     if (action->isChecked())
-        return screenGeometry;
+        return getScreenGeometry();
 
     if (m_isWayland) {
         // on Wayland it's not possible to get the work area from KWindowSystem
         // but plasmashell provides this through dbus
-        return m_availableScreenRect.isValid() ? m_availableScreenRect : screenGeometry;
+        if (m_availableScreenRect.isValid())
+            return m_availableScreenRect;
+        else
+            return getScreenGeometry();
     }
+
+    QRect screenGeometry = getScreenGeometry();
 
     if (m_outputOrderWatcher->outputOrder().count() > 1) {
         const QList<WId> allWindows = KX11Extras::windows();
