@@ -91,6 +91,7 @@ Q_SIGNALS:
 protected:
     void paintEvent(QPaintEvent *) override;
     void moveEvent(QMoveEvent *) override;
+    void resizeEvent(QResizeEvent *) override;
     void changeEvent(QEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
     bool focusNextPrevChild(bool) override;

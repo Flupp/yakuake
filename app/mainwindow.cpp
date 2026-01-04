@@ -1041,9 +1041,14 @@ void MainWindow::setWindowGeometry(int newWidth, int newHeight, int newPosition)
 
     setGeometry(workArea.x() + workArea.width() * newPosition * (100 - newWidth) / 10000, workArea.y(), targetWidth, maxHeight);
     initWaylandSurface();
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    int maxHeight = height();
 
     maxHeight -= m_titleBar->height();
-    m_titleBar->setGeometry(0, maxHeight, targetWidth, m_titleBar->height());
+    m_titleBar->setGeometry(0, maxHeight, width(), m_titleBar->height());
     if (!isVisible())
         m_titleBar->updateMask();
 
@@ -1066,6 +1071,8 @@ void MainWindow::setWindowGeometry(int newWidth, int newHeight, int newPosition)
     m_sessionStack->setGeometry(borderWidth, 0, width() - 2 * borderWidth, maxHeight - borderWidth);
 
     updateMask();
+
+    KMainWindow::resizeEvent(event);
 }
 
 void MainWindow::setScreen(QAction *action)
